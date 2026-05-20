@@ -1,11 +1,16 @@
+%validation of absorption vs. conductivity and incident angle plot from liu et al.
+
 clear;
 
 %number of elements
 n = 1000;
 
 %independent variables
-thetai = linspace(87, 90, n);   %incident angle (in degrees) on x-axis, linear scale
-sigma = logspace(4, 7, n);   %conductivity on y-axis, logarithmic scale
+thetai = linspace(0, 90, n);   %incident angle (in degrees) on x-axis, linear scale
+sigma = logspace(2, 7, n);   %conductivity on y-axis, logarithmic scale
+%note - change endpoints of thetai and sigma intervals to get 'zoomed in' regions of plot (to directly match plots presented by liu et al.)
+%change x-axis limits in line 52 to match thetai endpoints
+
 [T,S] = meshgrid(thetai, sigma);   %plotting coordinates
 A = zeros(n);   %container for absorption values
 
@@ -44,7 +49,7 @@ view(2);   %2d view
 yscale log
 colormap hot
 colorbar
-xlim([87,90])
+xlim([0,90])
 xlabel('Incident angle (degree)')
 ylabel('Conductivity (S/m)')
 
