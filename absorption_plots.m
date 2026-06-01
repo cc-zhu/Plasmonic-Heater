@@ -1,13 +1,16 @@
 %validation of absorption vs. conductivity and incident angle plot from liu et al.
+%calculated using parametrized reflection/transmission coefficients
 
 clear;
 
 %number of elements
 n = 1000;
+%incident angle lower bound
+t1 = 87;
 
 %independent variables
-thetai = linspace(0, 90, n);   %incident angle (in degrees) on x-axis, linear scale
-sigma = logspace(2, 7, n);   %conductivity on y-axis, logarithmic scale
+thetai = linspace(t1, 90, n);   %incident angle (in degrees) on x-axis, linear scale
+sigma = logspace(4, 7, n);   %conductivity on y-axis, logarithmic scale
 %note - change endpoints of thetai and sigma intervals to get 'zoomed in' regions of plot (to directly match plots presented by liu et al.)
 %change x-axis limits in line 52 to match thetai endpoints
 
@@ -49,7 +52,7 @@ view(2);   %2d view
 yscale log
 colormap hot
 colorbar
-xlim([0,90])
+xlim([t1,90])
 xlabel('Incident angle (degree)')
 ylabel('Conductivity (S/m)')
 
