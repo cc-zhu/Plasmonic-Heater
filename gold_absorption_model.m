@@ -12,8 +12,8 @@ lambda0 = linspace(600, 5000, n);   %operating free space wavelength (nm), linea
 
 lambda1 = 10*10^-6;   %fixed wavelength for thickness sweep
 omega1 = 2*pi*3*10^8/lambda1;   %corresponding omega
-%df1 = 20*10^-9;   %fixed thickness for wavelength sweep
-df1 = 1*10^-6;
+df1 = 40*10^-9;   %fixed thickness for wavelength sweep
+%df1 = 1*10^-6;
 
 [T1, Df] = meshgrid(thetai, df);   %plotting coordinates for varying thickness
 [T2, L0] = meshgrid(thetai, lambda0);   %plotting coordinates for varying wavelength
