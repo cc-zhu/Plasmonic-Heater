@@ -6,18 +6,20 @@ clear;
 n = 500;
 
 %independent variables
-thetai = linspace(0, 90, n);   %incident angle (degrees), linear scale
-df = linspace(20, 90, n);   %film thickness (nm), linear scale
-lambda0 = linspace(600, 5000, n);   %operating free space wavelength (nm), linear scale
+thetai = linspace(70, 90, n);   %incident angle (degrees), linear scale
+df = linspace(10, 100, n);   %film thickness (nm), linear scale
+lambda0 = linspace(600, 50000, n);   %operating free space wavelength (nm), linear scale
 
-lambda1 = 10*10^-6;   %fixed wavelength for thickness sweep
+lambda1 = 900*10^-9;   %fixed wavelength for thickness sweep
 omega1 = 2*pi*3*10^8/lambda1;   %corresponding omega
-df1 = 40*10^-9;   %fixed thickness for wavelength sweep
+df1 = 1*10^-9;   %fixed thickness for wavelength sweep
 %df1 = 1*10^-6;
+theta1 = 89.8;   %fixed angle for thickness & wavelength sweep
 
 [T1, Df] = meshgrid(thetai, df);   %plotting coordinates for varying thickness
 [T2, L0] = meshgrid(thetai, lambda0);   %plotting coordinates for varying wavelength
-A1 = zeros(n); A2 = zeros(n);   %containers for absorption values
+[Df1, L01] = meshgrid(df, lambda0);   %plotting coordinates for varying thickness and wavelength
+A1 = zeros(n); A2 = zeros(n); A3 = zeros(n);   %containers for absorption values
 
 %Drude parameters
 epsinf = 1.53;   %dielectric constant at infinite frequency
@@ -42,7 +44,7 @@ gamma = @(t) gammaep + gammagb(t) + gammas;   %total damping parameter (1/s)
 epsf = @(t,omega) epsinf - omegap^2/(omega^2 + gamma(t)^2) + 1i*gamma(t)*omegap^2/(omega*(omega^2 + gamma(t)));
 
 %transfer matrix method
-k0 = @(omega) omega/(2*pi*3*10^8);   %free space wave number (1/m)
+k0 = @(omega) omega/(3*10^8);   %free space wave number (1/m)
 
 %simplified transfer matrix terms
 % M11 = @(t,omega) cos(sqrt(epsf(t,omega)) * k0(omega) * t);
@@ -70,7 +72,7 @@ t = @(t,omega,theta) 2*eta(theta)/(eta(theta)*M22(t,omega,theta) + eta(theta)*M1
 % 
 % for i = 1:n
 %     %dfi = df(1,i)*10^-9;
-%     dfi = 80*10^-9;
+%     dfi = 25*10^-9;
 %     omegai = 2*pi*3*10^8 / (lambda0(1,i)*10^-9);
 %     %omegai = 900*10^-9;
 %     eps(1,i) = epsf(dfi,omegai);
@@ -84,10 +86,12 @@ t = @(t,omega,theta) 2*eta(theta)/(eta(theta)*M22(t,omega,theta) + eta(theta)*M1
 % 
 % end
 % 
-% plot(lambda0,eps1)
+% %plot(lambda0,eps1)
 % plot(lambda0,eps2)
-% plot(df, g)
-% plot(df,Dt)
+% %xlim([200,2000])
+% %ylim([-200,0])
+% %plot(df, g)
+% %plot(df,Dt)
 
 %thickness sweep, fixed wavelength
 for i = 1:n
@@ -108,7 +112,7 @@ surf(T2,Df,A1,'EdgeColor','None');   %3d plot of A1
 view(2);   %2d view
 colormap hot
 colorbar
-xlim([45,90])
+xlim([70,90])
 xlabel('Incident angle (degree)')
 ylabel('Film thickness (nm)')
 
@@ -135,9 +139,37 @@ surf(T1,L0,A2,'EdgeColor','None');   %3d plot of A2
 view(2);   %2d view
 colormap hot
 colorbar
-xlim([0,90])
+xlim([70,90])
 xlabel('Incident angle (degree)')
 ylabel('Operating wavelength (nm)')
 
 %max absorption from wavelength sweep
 Amax_w = max(A2,[],"all")
+
+
+% %plot absorption vs. thickness and wavelength
+% for i = 1:n
+%     for j = 1:n
+%         thetaiij = deg2rad(theta1);   %current thetai
+%         dfij = Df1(i,j)*10^-9;   %current df
+%         lambda0ij = L01(i,j)*10^-9;   %current lambda
+%         omegaij = 2*pi*3*10^8/lambda0ij;   %corresponding omega
+% 
+%         rij = r(dfij,omega1,thetaiij);   %reflection coefficient
+%         tij = t(dfij,omega1,thetaiij);   %transmission coefficient
+%         Aij = 1 - abs(rij)^2 - abs(tij)^2;   %absorption
+%         A3(i,j) = Aij;   %assign absorption
+%     end
+% end
+% 
+% %plot absorption vs. film thickness and incident angle
+% figure;
+% surf(Df1,L01,A3,'EdgeColor','None');   %3d plot of A1
+% view(2);   %2d view
+% colormap hot
+% colorbar
+% xlabel('Film thickness (nm)')
+% ylabel('Operating wavelength (nm)')
+% 
+% %max absorption from thickness sweep
+% Amax_tw = max(A3,[],"all")

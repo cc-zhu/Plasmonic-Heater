@@ -28,10 +28,10 @@ ep0 = 8.85419*10^-12;   %vacuum permittivity
 mu0 = 4*pi*10^-7;   %vacuum permeability
 
 %film dielectric
-epsf = @(sig,omega) 1+1i*sig/(omega*ep0);
+epsf = @(sig,omega) 1i*sig/(omega*ep0);
 
 %transfer matrix method
-k0 = @(omega) omega/(2*pi*3*10^8);   %free space wave number (1/m)
+k0 = @(omega) omega/(3*10^8);   %free space wave number (1/m)
 
 %simplified transfer matrix terms
 M11 = @(t,sig,omega,theta) cos(sqrt(epsf(sig,omega)-(sin(theta))^2) * k0(omega) * t);
