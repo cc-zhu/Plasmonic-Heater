@@ -13,7 +13,7 @@ hbar = h/(2*pi);   %reduced planck's constant (J*s)
 
 %independent variables
 df = linspace(20, 180, n);   %film thickness (nm), linear scale -> converted to m later
-lambda0 = linspace(0.8, 3000, n);   %operating free space wavelength (μm), logarithmic scale -> converted to m later
+lambda0 = linspace(0.8, 300, n);   %operating free space wavelength (μm), logarithmic scale -> converted to m later
 
 %fixed parameters
 lambda1 = 900e-9;   %fixed wavelength (m) for thickness sweep
@@ -24,7 +24,6 @@ df25 = 25e-9;
 df50 = 50e-9;
 df100 = 100e-9;
 df150 = 150e-9;
-df200 = 200e-9;
 
 %Drude parameters
 epsinf = 1.63;   %dielectric constant at infinite frequency
@@ -56,7 +55,6 @@ s25 = zeros([1 n]);
 s50 = zeros([1 n]);
 s100 = zeros([1 n]);
 s150 = zeros([1 n]);
-s200 = zeros([1 n]);
 
 %optical conductivity vs wavelength
 for i = 1:n
@@ -83,38 +81,17 @@ for i = 1:n
     dfi = df150;
     eps = epsf(dfi,omegai);
     s150(1,i) = -1i*omegai*eps0*(eps - 1);
-
-    %200nm film
-    dfi = df200;
-    eps = epsf(dfi,omegai);
-    s200(1,i) = -1i*omegai*eps0*(eps - 1);
 end
 
 clf
-tiledlayout(2,1)
+tiledlayout(4,2)
 
 ax1 = nexttile;
 hold(ax1,'on')
-plot(ax1, lambda0, real(s25))
-plot(ax1, lambda0, real(s50))
-plot(ax1, lambda0, real(s100))
-plot(ax1, lambda0, real(s150))
-plot(ax1, lambda0, real(s200))
-hold(ax1,'off')
-title('Real part of conductivity vs. wavelength')
+plot(ax1,lambda0,real(s25));
+plot(ax1,lambda0,real(s50));
+plot(ax1,lambda0,real(s100));
+title('Conductivity vs. wavelength')
 xlabel('Wavelength (μm)')
-ylabel('Conductivity (S/m)')
-lgd = legend('25 nm','50 nm','100 nm','150 nm','200 nm',Location='northeastoutside');
-title(lgd,'Film thicknesses')
-
-ax2 = nexttile;
-hold(ax2,'on')
-plot(ax2, lambda0, imag(s25))
-plot(ax2, lambda0, imag(s50))
-plot(ax2, lambda0, imag(s100))
-plot(ax2, lambda0, imag(s150))
-plot(ax2, lambda0, imag(s200))
-hold(ax2,'off')
-title('Imaginary part of conductivity vs. wavelength')
-xlabel('Wavelength (μm)')
-ylabel('Conductivity (S/m)')
+ylabel('Optical conductivity (S/m)')
+legend('Real part','Imaginary part',Location='northeastoutside')

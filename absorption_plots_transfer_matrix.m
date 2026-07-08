@@ -5,8 +5,14 @@ clear;
 
 %number of elements
 n = 1000;
+
+%constant definitions
+c = 3e8;   %speed of light
+ep0 = 8.85419*10^-12;   %vacuum permittivity
+mu0 = 4*pi*10^-7;   %vacuum permeability
+
 %incident angle lower bound
-t1 = 87;
+t1 = 80;
 
 %independent variables
 thetai = linspace(t1, 90, n);   %incident angle (in degrees) on x-axis, linear scale
@@ -18,14 +24,10 @@ sigma = logspace(4, 7, n);   %conductivity on y-axis, logarithmic scale
 A = zeros(n);   %container for absorption values
 
 %film parameters
-df = 10^-5;   %film thickness 10 μm
-f = 0.3*10^12;   %operating freqeuncy 0.3 THz
+df = 1e-7;   %film thickness 100 nm
+lambda = 1.2e-6;   %operating wavelength 1000 nm
+f = c/lambda;   %operating freqeuncy
 Omega = 2*pi*f;   %angular frequency
-w = 0.001;   %operating wavelength 1 mm
-
-%constants
-ep0 = 8.85419*10^-12;   %vacuum permittivity
-mu0 = 4*pi*10^-7;   %vacuum permeability
 
 %film dielectric
 epsf = @(sig,omega) 1i*sig/(omega*ep0);
@@ -72,6 +74,7 @@ colorbar
 xlim([t1,90])
 xlabel('Incident angle (degree)')
 ylabel('Conductivity (S/m)')
+title('Absorption vs. incident angle and conductivity for lambda = 1.2 μm, df = 100 nm')
 
 %max absorption
 Amax = max(A,[],"all")

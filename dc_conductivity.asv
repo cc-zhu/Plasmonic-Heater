@@ -1,0 +1,22 @@
+%DC conductivity of gold thin film
+
+clear;
+
+%retrieve experimental data
+fileID = fopen('dcconductivity-vs-thickness.txt');
+sigma_dc = fscanf(fileID, '%f%f', [2 16]);
+fclose(fileID);
+
+%scale datapoints
+for i = 1:16
+    si = sigma_dc(2,i);
+    sigma_dc(2,i) = si*10^8;
+end
+
+%
+
+
+scatter(sigma_dc(1,:), sigma_dc(2,:),'filled')
+title('Measured DC conductivity vs. film thickness')
+xlabel('Film thickness (nm)')
+ylabel('DC conductivity (S/m)')
